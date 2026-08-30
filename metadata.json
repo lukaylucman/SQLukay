@@ -1,0 +1,6 @@
+{
+  "name": "SQLukay",
+  "description": "Your MySQL workspace, directly from the browser. Manage databases, execute queries, and explore tables with a professional interface.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,32 @@
+{
+  "collections": [
+    {
+      "name": "users",
+      "documents": [
+        {
+          "name": "userId",
+          "collections": [
+            {
+              "name": "connections",
+              "documents": [
+                {
+                  "name": "connectionId",
+                  "fields": [
+                    { "name": "id", "type": "string" },
+                    { "name": "name", "type": "string" },
+                    { "name": "host", "type": "string" },
+                    { "name": "port", "type": "number" },
+                    { "name": "user", "type": "string" },
+                    { "name": "password", "type": "string" },
+                    { "name": "database", "type": "string" },
+                    { "name": "ssl", "type": "boolean" }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
