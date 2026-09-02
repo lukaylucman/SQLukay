@@ -66,7 +66,7 @@ export default function ConnectionVault() {
     setDiagnostics(null);
     setTestSuccess(null);
     try {
-      const res = await fetch('/api/db/test-connection', {
+      const res = await fetch('https://sqlukay.vercel.app/api/db/test-connection', {
         headers: { 'Content-Type': 'application/json' },
         method: 'POST',
         body: JSON.stringify({ config: form })
@@ -112,7 +112,7 @@ export default function ConnectionVault() {
 
       if (!config) return;
 
-      const res = await fetch('/api/db/connect', {
+      const res = await fetch('https://sqlukay.vercel.app/api/db/connect', {
         headers: { 'Content-Type': 'application/json' },
         method: 'POST',
         body: JSON.stringify({ config })

@@ -17,7 +17,7 @@ export default function SQLEditor({ tabId }: { tabId: string }) {
     setLoading(true);
     setResult(null);
     try {
-      const res = await fetch('/api/db/query', {
+      const res = await fetch('https://sqlukay.vercel.app/api/db/query', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
