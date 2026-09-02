@@ -112,7 +112,7 @@ export default function ConnectionVault() {
 
       if (!config) return;
 
-      const res = await db/connect', {
+      const res = await fetch('/api/db/connect', {
         headers: { 'Content-Type': 'application/json' },
         method: 'POST',
         body: JSON.stringify({ config })
