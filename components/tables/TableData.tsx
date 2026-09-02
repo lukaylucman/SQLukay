@@ -16,7 +16,7 @@ export default function TableData({ database, table }: { database: string, table
   const loadData = async () => {
     setLoading(true);
     try {
-      const res = await fetch('https://sqlukay.vercel.app/api/db/query', {
+      const res = await fetch('/api/db/query', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -37,7 +37,7 @@ export default function TableData({ database, table }: { database: string, table
   const loadStructure = async () => {
     setLoading(true);
     try {
-      const res = await fetch('https://sqlukay.vercel.app/api/db/explore', {
+      const res = await fetch('/api/db/explore', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -63,7 +63,7 @@ export default function TableData({ database, table }: { database: string, table
     setLoading(true);
     try {
       // Fetch full table data for export
-      const res = await fetch('https://sqlukay.vercel.app/api/db/query', {
+      const res = await fetch('/api/db/query', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

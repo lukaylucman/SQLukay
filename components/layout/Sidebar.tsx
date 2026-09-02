@@ -13,7 +13,7 @@ export default function Sidebar() {
   
   const loadDatabases = async () => {
     try {
-      const res = await fetch('https://sqlukay.vercel.app//api/db/explore', {
+      const res = await fetch('/api/db/explore', {
         method: 'POST',
         body: JSON.stringify({ token: connectionToken, isDemo: isDemoMode, action: 'listDatabases' })
       });
@@ -32,7 +32,7 @@ export default function Sidebar() {
     
     if (!isExpanded && !dbTables[db]) {
       try {
-        const res = await fetch('https://sqlukay.vercel.app//api/db/explore', {
+        const res = await fetch('/api/db/explore', {
           method: 'POST',
           body: JSON.stringify({ token: connectionToken, isDemo: isDemoMode, action: 'listTables', database: db })
         });

@@ -10,16 +10,72 @@ export default function Dashboard() {
   const conn = connections.find(c => c.id === activeConnectionId);
 
   useEffect(() => {
-    // In a real app, we would fetch actual stats from the server
-    // For now, we simulate this with a simple query if connected
-    if (connectionToken || isDemoMode) {
-      setStats({
-        version: isDemoMode ? 'Demo 1.0' : '8.0.32',
-        uptime: '2 days 4 hours',
-        databases: isDemoMode ? 1 : 4,
-        tables: isDemoMode ? 5 : 42,
-      });
-    }
+    const fetchStats = async () => {
+      if (isDemoMode) {
+        setStats({
+          version: 'Demo 1.0',
+          uptime: 'Simulated',
+          databases: 2,
+          tables: 8,
+        });
+        return;
+      }
+      
+      if (!connectionToken) return;
+
+      try {
+        const fetchQuery = async (q: string) => {
+          const res = await fetch('/api/db/query', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token: connectionToken, query: q, isDemo: false })
+          });
+          const data = await res.json();
+          if (data.error) throw new Error(data.error);
+          return data.data;
+        };
+
+        const [versionRes, uptimeRes, dbRes, tableRes] = await Promise.all([
+          fetchQuery('SELECT VERSION() as v'),
+          fetchQuery("SHOW GLOBAL STATUS LIKE 'Uptime'"),
+          fetchQuery('SELECT COUNT(*) as c FROM information_schema.schemata'),
+          fetchQuery("SELECT COUNT(*) as c FROM information_schema.tables WHERE table_type = 'BASE TABLE'")
+        ]);
+        
+        const getFirstVal = (arr: any[], key: string) => {
+           if (!arr || !arr[0]) return null;
+           const row = arr[0];
+           for (const k in row) {
+             if (k.toLowerCase() === key.toLowerCase()) return row[k];
+           }
+           return null;
+        };
+
+        const uptimeValue = getFirstVal(uptimeRes, 'value');
+        let uptimeStr = '-';
+        if (uptimeValue !== null) {
+           const seconds = parseInt(uptimeValue, 10);
+           if (!isNaN(seconds)) {
+             const d = Math.floor(seconds / (3600*24));
+             const h = Math.floor((seconds % (3600*24)) / 3600);
+             const m = Math.floor((seconds % 3600) / 60);
+             uptimeStr = `${d > 0 ? d + 'd ' : ''}${h}h ${m}m`;
+           }
+        }
+        
+        setStats({
+          version: getFirstVal(versionRes, 'v') || '-',
+          uptime: uptimeStr,
+          databases: getFirstVal(dbRes, 'c') || 0,
+          tables: getFirstVal(tableRes, 'c') || 0,
+        });
+        
+      } catch (e) {
+        console.error("Failed to fetch dashboard stats", e);
+      }
+    };
+    
+    fetchStats();
   }, [connectionToken, isDemoMode]);
 
   return (
