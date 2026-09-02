@@ -60,7 +60,7 @@ export default function Topbar() {
               const state = useAppStore.getState();
               if (state.connectionToken) {
                 try {
-                  await fetch('/api/db/connect', {
+                  await fetch('https://sqlukay.vercel.app//api/db/connect', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ action: 'disconnect', connectionId: state.connectionToken })

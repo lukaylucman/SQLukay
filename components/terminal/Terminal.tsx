@@ -45,7 +45,7 @@ export default function Terminal() {
 
     try {
       // Small delay to simulate command execution
-      const res = await fetch('/api/db/query', {
+      const res = await fetch('https://sqlukay.vercel.app//api/db/query', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
