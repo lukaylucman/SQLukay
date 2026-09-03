@@ -4,6 +4,7 @@ import { DatabaseAdapter } from '@/lib/db/adapter';
 import { MySQLAdapter } from '@/lib/db/mysql-adapter';
 import { DemoAdapter } from '@/lib/db/demo-adapter';
 
+export const dynamic = 'force-dynamic';
 export async function POST(req: Request) {
   const startTime = Date.now();
   try {

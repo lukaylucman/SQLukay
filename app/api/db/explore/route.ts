@@ -3,6 +3,7 @@ import { ConnectionManager } from '@/server/services/connection-manager';
 import { MySQLAdapter } from '@/lib/db/mysql-adapter';
 import { DemoAdapter } from '@/lib/db/demo-adapter';
 
+export const dynamic = 'force-dynamic';
 export async function POST(req: Request) {
   try {
     const { token, action, database, table, isDemo } = await req.json();
