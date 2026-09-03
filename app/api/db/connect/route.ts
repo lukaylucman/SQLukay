@@ -1,27 +1,31 @@
 import { NextResponse } from 'next/server';
 import { ConnectionManager } from '@/server/services/connection-manager';
-import { v4 as uuidv4 } from 'uuid';
 
 export async function POST(req: Request) {
   try {
-    const { connectionId, config, action } = await req.json();
+    const body = await req.json();
+    const { action, connectionId } = body;
 
     if (action === 'disconnect') {
-      await ConnectionManager.disconnect(connectionId);
+      if (connectionId) {
+        await ConnectionManager.disconnect(connectionId);
+      }
       return NextResponse.json({ success: true });
     }
 
-    let connectConfig = config;
-
-    if (!connectConfig || !connectConfig.host) {
-      return NextResponse.json({ error: 'Invalid connection configuration' }, { status: 400 });
+    const { config } = body;
+    if (!config) {
+      return NextResponse.json({ error: 'Configuration is required' }, { status: 400 });
     }
 
-    const token = Buffer.from(JSON.stringify(connectConfig)).toString("base64");
-    await ConnectionManager.connect(token, connectConfig);
-
-    return NextResponse.json({ success: true, token });
+    const connectionToken = Buffer.from(JSON.stringify(config)).toString('base64');
+    await ConnectionManager.connect(connectionToken, config);
+    return NextResponse.json({ token: connectionToken });
   } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    console.error('Connection error:', error);
+    return NextResponse.json({ 
+      error: error.message || 'Failed to connect to database',
+      details: error.code || 'UNKNOWN_ERROR'
+    }, { status: 500 });
   }
 }
